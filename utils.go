@@ -34,9 +34,7 @@ func currentGid() int {
 // sh is a simple os.exec Command tool, returns trimmed string output
 func sh(name string, args ...string) (string, error) {
 	cmd := exec.Command(name, args...)
-	if isDebugEnabled() {
-		log.Printf("DEBUG: sh CMD: %q", cmd)
-	}
+	log.Printf("DEBUG: sh CMD: %q", cmd)
 	// TODO: capture and output STDERR to logfile?
 	out, err := cmd.Output()
 	return strings.Trim(string(out), " \n"), err
@@ -69,9 +67,7 @@ func shWithTimeout(howLong time.Duration, name string, args ...string) (string, 
 	}
 	// set up the results channel
 	resultsChan := make(chan ShResult, 1)
-	if isDebugEnabled() {
-		log.Printf("DEBUG: shWithTimeout: %v, %s, %v", howLong, name, args)
-	}
+	log.Printf("DEBUG: shWithTimeout: %v, %s, %v", howLong, name, args)
 
 	// fire up the goroutine for the actual shell command
 	go func() {

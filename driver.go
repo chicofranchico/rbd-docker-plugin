@@ -455,9 +455,12 @@ func (d cephRBDVolumeDriver) Get(r *volume.GetRequest) (*volume.GetResponse, err
 		log.Printf("ERROR: parsing volume: %s", err)
 		return nil, err
 	}
+	
+	log.Printf("DEBUG: pool being used: %s", pool)
 
 	// Check to see if the image exists
 	exists, err := d.rbdImageExists(pool, name)
+	log.Printf("DEBUG: Exists from rbdImageExists: %s", exists)
 	if err != nil {
 		log.Printf("WARN: checking for RBD Image: %s", err)
 		return nil, err
@@ -671,7 +674,9 @@ func (d *cephRBDVolumeDriver) parseImagePoolNameSize(fullname string) (pool stri
 
 // rbdImageExists will check for an existing Ceph RBD Image
 func (d *cephRBDVolumeDriver) rbdImageExists(pool, findName string) (bool, error) {
-	_, err := d.rbdsh(pool, "info", findName)
+	wtf, err := d.rbdsh(pool, "info", findName)
+	log.Printf("DEBUG: wtf from rbdImageExists: %s", wtf)
+	log.Printf("DEBUG: err from rbdImageExists: %s", err)
 	if err != nil {
 		// NOTE: even though method signature returns err - we take the error
 		// in this instance as the indication that the image does not exist
